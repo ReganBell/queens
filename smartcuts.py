@@ -33,10 +33,8 @@ spaces = []
 for x in range(0, N):
     for y in range(0, N):
         spaces.append((x,y))
-sols = []
-for q_x, q_y in spaces:
-    sols += rec_search({}, q_x, q_y, [(x,y) for x,y in spaces if not attackable(q_x, q_y, x, y, N)])
 sol_set = set()
-for sol in sols:
-    sol_set.add(sol)
+for q_x, q_y in spaces:
+    for sol in rec_search({}, q_x, q_y, [(x,y) for x,y in spaces if not attackable(q_x, q_y, x, y, N)]):
+        sol_set.add(sol)
 print(len(sol_set))

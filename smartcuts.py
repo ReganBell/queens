@@ -1,4 +1,10 @@
+import argparse
 from collections import deque
+
+parser = argparse.ArgumentParser("n_queens")
+parser.add_argument("N", help="the N in N queens", type=int)
+args = parser.parse_args()
+N = args.N
 
 def attackable(q_x, q_y, x, y, N):
     if q_x == x:
@@ -12,12 +18,9 @@ def attackable(q_x, q_y, x, y, N):
             return True
     return False
     
-N = 5
-
 def sol_string(queens):
     return str(sorted(list(queens)))
 
-#return list of queens
 def rec_search(queens, q_x, q_y, spaces):
     queens[(q_x, q_y)] = True
     spaces = [(x,y) for x,y in spaces if not attackable(q_x, q_y, x, y, N)]

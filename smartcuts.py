@@ -1,5 +1,6 @@
 import argparse
 from collections import deque
+from json import loads
 
 parser = argparse.ArgumentParser("n_queens")
 parser.add_argument("N", help="the N in N queens", type=int)
@@ -18,14 +19,14 @@ def attackable(q_x, q_y, x, y, N):
             return True
     return False
     
-def sol_string(queens):
-    return str(sorted(list(queens)))
+def sol_sorted(queens):
+    return sorted(list(queens))
 
 def rec_search(queens, q_x, q_y, spaces):
     queens[(q_x, q_y)] = True
     spaces = [(x,y) for x,y in spaces if not attackable(q_x, q_y, x, y, N)]
     if len(spaces) == 0:
-        return [sol_string(queens)] if len(queens) == N else []
+        return [sol_sorted(queens)] if len(queens) == N else []
     else:
         sols = []
         for s_x, s_y in spaces:
@@ -36,8 +37,15 @@ spaces = []
 for x in range(0, N):
     for y in range(0, N):
         spaces.append((x,y))
-sol_set = set()
+sol_dict = {}
 for q_x, q_y in spaces:
     for sol in rec_search({}, q_x, q_y, [(x,y) for x,y in spaces if not attackable(q_x, q_y, x, y, N)]):
-        sol_set.add(sol)
-print(len(sol_set))
+        sol_dict[str(sol)] = sol
+for sol in sol_dict.values():
+    output = ''
+    for x in range(0, N):
+        for y in range(0, N):
+            output += 'Q' if (x,y) in sol else '.'
+        output += '\n'
+    print(output)
+print(len(sol_dict), 'solutions found')
